@@ -1,8 +1,12 @@
+/**
+ * sensor de color tcs34725 mira el color predominante de una tv, y lo copia en un led rgb. 
+ */ 
 #include <Arduino.h>
 #include <Wire.h>
 
 #include "Adafruit_TCS34725.h"
 
+// pines pwm para un arduino mega (led rgb). 
 #define redpin 6
 #define greenpin 5
 #define bluepin 3
