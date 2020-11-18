@@ -30,7 +30,7 @@ static const unsigned char PROGMEM logo_bmp[] = {
 #define XPOS 0  // Indexes into the 'icons' array in function below
 #define YPOS 1
 #define DELTAY 2
-
+// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 4);
 // muestra texto con scroll.
 void testscrolltext(void) {
     display.clearDisplay();
