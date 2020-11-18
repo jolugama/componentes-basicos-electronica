@@ -30,17 +30,12 @@ const byte SCREEN_HEIGHT = 64;  // alto de la pantalla OLED
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 4);  //4 es el reset. no tocar.
 
 // privadas
-#include "effectExamples.h"
 #include "button.h"
+#include "effectExamples.h"
+#include "images.h"
+#include "osciloscope.h"
 
 // variables
-byte x = 0;
-int getValueSensor = 0;
-
-byte dataArray[SCREEN_WIDTH];
-byte horizontalPosition = 0;
-byte horizontalPositionBefore;
-float currentVolt;
 
 void configAnalog() {
     analogSetWidth(12);                            // Sets the sample bits and read resolution, default is 12-bit (0 - 4095), range is 9 - 12 bits
@@ -57,7 +52,6 @@ void configAnalog() {
     analogSetClockDiv(1);  // Set the divider for the ADC clock, default is 1, range is 1 - 255
 }
 
-
 void setup() {
     Serial.begin(115200);
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // Si falla, revisar con un escaneador de i2c
@@ -68,7 +62,7 @@ void setup() {
 
     display.display();
 
-    // delay(2000);
+    delay(300);
     // testscrolltext();    // Draw scrolling text
     // testdrawbitmap();    // Draw a small bitmap image
 
@@ -84,90 +78,36 @@ void setup() {
 
     configAnalog();
 
-     button::setup(36);
-}
+    display.clearDisplay();
 
-void drawValues() {
-    horizontalPosition = horizontalPosition % SCREEN_WIDTH;
-    getValueSensor = analogRead(sensorPin);
-    dataArray[horizontalPosition] = SCREEN_HEIGHT * getValueSensor / ANALOG_MAX;
-
-    horizontalPosition++;
-    byte i = horizontalPosition;
-    // Serial.println(analogRead(sensorPin));
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-        // Serial.println(i);
-        // delay(1000);
-        i = i % SCREEN_WIDTH;
-        display.drawLine(x, dataArray[i], x, horizontalPositionBefore, 1);
-        horizontalPositionBefore = dataArray[i];
-        i++;
-        // if (x == 0) {
-        //     display.clearDisplay();
-        // }
-    }
     display.display();
-}
 
-void drawValues2() {
-    getValueSensor = analogRead(sensorPin);
-    currentVolt = (getValueSensor * VOLT) / ANALOG_MAX;
-    // adapto en pantalla desde 0 a el valor analógico máx que lea (4095 en esp32,1023 en arduino), a la altura de pantalla
-    float graficaVoltaje = map(getValueSensor, 0, ANALOG_MAX, SCREEN_HEIGHT - 11, 0);
+    display.setTextSize(1);
 
-    horizontalPosition = horizontalPosition % SCREEN_WIDTH;
-    // dataArray[horizontalPosition] = (SCREEN_HEIGHT-11) * getValueSensor / ANALOG_MAX;
-    dataArray[horizontalPosition] = graficaVoltaje;
-
-    horizontalPosition++;
-    byte i = horizontalPosition;
-    // Serial.println(analogRead(sensorPin));
-    for (int x = 17; x < SCREEN_WIDTH; x++) {
-        // Serial.println(i);
-        // delay(1000);
-        i = i % SCREEN_WIDTH;
-        display.drawLine(x, dataArray[i], x, horizontalPositionBefore, 1);
-        // display.drawPixel( dataArray[i], 52 - horizontalPositionBefore, WHITE);
-        horizontalPositionBefore = dataArray[i];
-        i++;
-        // if (x == 0) {
-        //     display.clearDisplay();
-        // }
+    for (int i = 0; i < 100; i++) {
+        display.clearDisplay();
+        display.drawBitmap((display.width() - 48) / 2, 0, images::happy, 48, 48, 1);
+        display.setCursor(0, 57);
+        display.println(F("Hola que tal estas?"));  //21 caracteres máximo.
+        display.display();
+        delay(300);
+        display.clearDisplay();
+        display.drawBitmap((display.width() - 48) / 2, 0, images::shocked2, 48, 48, 1);
+        display.setCursor(0, 57);
+        display.println(F("Hola que tal estas?"));  //21 caracteres máximo.
+        display.display();
+        delay(300);
     }
-    display.display();
-}
 
-void paintAxes() {
-    //dibuja escala. 53/3.3=16    53-16=37   37-16=21    21-16=5
-    display.setCursor(0, 5);
-    display.print(F("3V"));
-    display.setCursor(0, 21);
-    display.print(F("2V"));
-    display.setCursor(0, 37);
-    display.print(F("1V"));
+    delay(4000);
 
-    display.drawLine(15, 5, 17, 5, WHITE);
-    display.drawLine(15, 21, 17, 21, WHITE);
-    display.drawLine(15, 37, 17, 37, WHITE);
-
-    //dibuja eje X y Y. A partir de 53, dejo espacio para escribir el número.
-    display.drawLine(0, 53, 127, 53, WHITE);
-    display.drawLine(17, 53, 17, 0, WHITE);
+    button::setup(36);
 }
 
 void loop() {
     display.clearDisplay();
-
-    paintAxes();
-
-    drawValues2();
-
+    osciloscope::paintAxes();
+    osciloscope::drawValues();
+    display.display();
     button::loop(36);
-
-    // display.display();
-    // if (millis() > 10000 && millis() < 20000) {
-    //     sleepDisplay(&display);
-    // } else {
-    //     wakeDisplay(&display);
-    // }
 }
