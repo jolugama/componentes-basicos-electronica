@@ -31,6 +31,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 4);  //4 es el rese
 
 // privadas
 #include "effectExamples.h"
+#include "button.h"
 
 // variables
 byte x = 0;
@@ -56,13 +57,6 @@ void configAnalog() {
     analogSetClockDiv(1);  // Set the divider for the ADC clock, default is 1, range is 1 - 255
 }
 
-void sleepDisplay(Adafruit_SSD1306* display) {
-    display->ssd1306_command(SSD1306_DISPLAYOFF);
-}
-
-void wakeDisplay(Adafruit_SSD1306* display) {
-    display->ssd1306_command(SSD1306_DISPLAYON);
-}
 
 void setup() {
     Serial.begin(115200);
@@ -89,6 +83,8 @@ void setup() {
     display.setTextSize(1);
 
     configAnalog();
+
+     button::setup(36);
 }
 
 void drawValues() {
@@ -98,7 +94,7 @@ void drawValues() {
 
     horizontalPosition++;
     byte i = horizontalPosition;
-    Serial.println(analogRead(sensorPin));
+    // Serial.println(analogRead(sensorPin));
     for (int x = 0; x < SCREEN_WIDTH; x++) {
         // Serial.println(i);
         // delay(1000);
@@ -116,6 +112,7 @@ void drawValues() {
 void drawValues2() {
     getValueSensor = analogRead(sensorPin);
     currentVolt = (getValueSensor * VOLT) / ANALOG_MAX;
+    // adapto en pantalla desde 0 a el valor analógico máx que lea (4095 en esp32,1023 en arduino), a la altura de pantalla
     float graficaVoltaje = map(getValueSensor, 0, ANALOG_MAX, SCREEN_HEIGHT - 11, 0);
 
     horizontalPosition = horizontalPosition % SCREEN_WIDTH;
@@ -124,7 +121,7 @@ void drawValues2() {
 
     horizontalPosition++;
     byte i = horizontalPosition;
-    Serial.println(analogRead(sensorPin));
+    // Serial.println(analogRead(sensorPin));
     for (int x = 17; x < SCREEN_WIDTH; x++) {
         // Serial.println(i);
         // delay(1000);
@@ -164,6 +161,8 @@ void loop() {
     paintAxes();
 
     drawValues2();
+
+    button::loop(36);
 
     // display.display();
     // if (millis() > 10000 && millis() < 20000) {
