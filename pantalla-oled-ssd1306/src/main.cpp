@@ -18,8 +18,11 @@ https://cdn-learn.adafruit.com/downloads/pdf/adafruit-gfx-graphics-library.pdf
 #include <SPI.h>
 #include <Wire.h>
 
-// constantes
+// pines usados
 const byte sensorPin = 34;
+const byte buttonPin = 36;
+
+// constantes
 const int ANALOG_MAX = 4096;  // en arduino es 1023. Depende de los bit elegidos en la funcion configAnalog, variable analogSetWidth
 const float VOLT = 3.3;
 
@@ -84,24 +87,46 @@ void setup() {
 
     display.setTextSize(1);
 
-    for (int i = 0; i < 100; i++) {
+    String frase = "Hola que tal estas?";  //21 caracteres máximo.
+    const int velocity = 150;
+    for (int i = 0; i < (frase.length() / 6); i++) {
         display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::happy, 48, 48, 1);
+        display.drawBitmap((display.width() - 48) / 2, 0, images::sceptic, 48, 48, 1);
         display.setCursor(0, 57);
-        display.println(F("Hola que tal estas?"));  //21 caracteres máximo.
+        display.println(frase);
         display.display();
-        delay(300);
+        delay(velocity);
         display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::shocked2, 48, 48, 1);
+        display.drawBitmap((display.width() - 48) / 2, 0, images::shocked, 48, 48, 1);
         display.setCursor(0, 57);
-        display.println(F("Hola que tal estas?"));  //21 caracteres máximo.
+        display.println(frase);
         display.display();
-        delay(300);
+        delay(velocity);
+        display.clearDisplay();
+        display.drawBitmap((display.width() - 48) / 2, 0, images::sceptic, 48, 48, 1);
+        display.setCursor(0, 57);
+        display.println(frase);
+        display.display();
+        delay(velocity);
+        display.clearDisplay();
+        display.drawBitmap((display.width() - 48) / 2, 0, images::nervous, 48, 48, 1);
+        display.setCursor(0, 57);
+        display.println(frase);
+        display.display();
+        delay(velocity);
     }
 
-    delay(4000);
+    display.clearDisplay();
+    display.drawBitmap((display.width() - 48) / 2, 0, images::happy, 48, 48, 1);
+    display.setCursor(0, 57);
+    // display.setTextColor(BLACK, WHITE);  //inverted
+    display.println(frase);
+    display.display();
 
-    button::setup(36);
+    delay(4000);
+    // display.setTextColor(WHITE);
+
+    button::setup(buttonPin);
 }
 
 void loop() {
@@ -109,5 +134,5 @@ void loop() {
     osciloscope::paintAxes();
     osciloscope::drawValues();
     display.display();
-    button::loop(36);
+    button::loop(buttonPin);
 }
