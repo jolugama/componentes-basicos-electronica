@@ -38,6 +38,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 4);  //4 es el rese
 #include "images.h"
 #include "osciloscope.h"
 
+// privadas2
+#include "smile.h"
+
 // variables
 
 void configAnalog() {
@@ -87,42 +90,11 @@ void setup() {
 
     display.setTextSize(1);
 
-    String frase = "Hola que tal estas?";  //21 caracteres máximo.
-    const int velocity = 150;
-    for (int i = 0; i < (frase.length() / 6); i++) {
-        display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::sceptic, 48, 48, 1);
-        display.setCursor(0, 57);
-        display.println(frase);
-        display.display();
-        delay(velocity);
-        display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::shocked, 48, 48, 1);
-        display.setCursor(0, 57);
-        display.println(frase);
-        display.display();
-        delay(velocity);
-        display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::sceptic, 48, 48, 1);
-        display.setCursor(0, 57);
-        display.println(frase);
-        display.display();
-        delay(velocity);
-        display.clearDisplay();
-        display.drawBitmap((display.width() - 48) / 2, 0, images::nervous, 48, 48, 1);
-        display.setCursor(0, 57);
-        display.println(frase);
-        display.display();
-        delay(velocity);
-    }
-
-    display.clearDisplay();
-    display.drawBitmap((display.width() - 48) / 2, 0, images::happy, 48, 48, 1);
-    display.setCursor(0, 57);
-    // display.setTextColor(BLACK, WHITE);  //inverted
-    display.println(frase);
-    display.display();
-
+    smile::speak("Hola Jose");
+    delay(1000);
+    smile::speak("Como va todo?");
+    delay(1000);
+    smile::smile("Pasa un buen dia!");
     delay(4000);
     // display.setTextColor(WHITE);
 
