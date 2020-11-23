@@ -34,12 +34,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, 4);  //4 es el rese
 
 // privadas
 #include "button.h"
-#include "effectExamples.h"
 #include "images.h"
 #include "osciloscope.h"
 
 // privadas2
-#include "smile.h"
+#include "effects.h"
 
 // variables
 
@@ -69,13 +68,7 @@ void setup() {
     display.display();
 
     delay(300);
-    // testscrolltext();    // Draw scrolling text
-    // testdrawbitmap();    // Draw a small bitmap image
 
-    // display.invertDisplay(true);
-    // delay(1000);
-    // display.invertDisplay(false);
-    // delay(1000);
     // testanimate(logo_bmp, LOGO_WIDTH, LOGO_HEIGHT); // Animate bitmaps
 
     display.setRotation(0);  //orientacion del display 0,1,2,3
@@ -90,13 +83,16 @@ void setup() {
 
     display.setTextSize(1);
 
-    smile::speak("Hola Jose");
+    effects::speak("Bienvenido al...");
     delay(1000);
-    smile::speak("Como va todo?");
+    effects::speak("...Osciloscopio app");
     delay(1000);
-    smile::smile("Pasa un buen dia!");
+    effects::speak("Prueba con un sensor...");
+    delay(1000);
+    effects::speak("... en el puerto 34.");
+    delay(1000);
+    effects::smile("... en el puerto 34.");
     delay(4000);
-    // display.setTextColor(WHITE);
 
     button::setup(buttonPin);
 }
