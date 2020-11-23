@@ -1,7 +1,7 @@
-#include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SSD1306.h>
+#include <Arduino.h>
 
 namespace osciloscope {
 byte x = 0;
@@ -13,7 +13,7 @@ byte horizontalPositionBefore;
 float currentVolt;
 
 void drawValues() {
-        display.setTextSize(1);
+    display.setTextSize(1);
     getValueSensor = analogRead(sensorPin);
     currentVolt = (getValueSensor * VOLT) / ANALOG_MAX;
     // adapto en pantalla desde 0 a el valor analógico máx que lea (4095 en esp32,1023 en arduino), a la altura de pantalla
@@ -25,7 +25,8 @@ void drawValues() {
 
     horizontalPosition++;
     byte i = horizontalPosition;
-    // Serial.println(analogRead(sensorPin));
+    Serial.println(analogRead(sensorPin));
+
     for (int x = 17; x < SCREEN_WIDTH; x++) {
         // Serial.println(i);
         // delay(1000);
@@ -38,10 +39,14 @@ void drawValues() {
         //     display.clearDisplay();
         // }
     }
+    display.setCursor((SCREEN_WIDTH/2)-10, 57);
+     display.setTextColor(WHITE);
+    display.setTextSize(1);
+    display.println(analogRead(sensorPin));
 }
 
 void paintAxes() {
-       display.setTextSize(1);
+    display.setTextSize(1);
     //dibuja escala. 53/3.3=16    53-16=37   37-16=21    21-16=5
     display.setCursor(0, 5);
     display.print(F("3V"));

@@ -83,21 +83,22 @@ void setup() {
 
     display.setTextSize(1);
 
-    effects::speak("Bienvenido al...");
-    delay(1000);
-    effects::speak("...Osciloscopio app");
-    delay(1000);
-    effects::speak("Prueba con un sensor...");
-    delay(1000);
-    effects::speak("... en el puerto 34.");
-    delay(1000);
-    effects::smile("... en el puerto 34.");
-    delay(4000);
+    // effects::speak("Bienvenido al...");
+    // delay(1000);
+    // effects::speak("...Osciloscopio app");
+    // delay(1000);
+    // effects::speak("Prueba con un sensor...");
+    // delay(1000);
+    // effects::speak("... en el puerto 34.");
+    // delay(1000);
+    // effects::smile("... en el puerto 34.");
+    // delay(4000);
 
     button::setup(buttonPin);
 }
 
 void loop() {
+    delay(20); // pequeño delay para que vaya un poco más lento.
     display.clearDisplay();
     osciloscope::paintAxes();
     osciloscope::drawValues();
